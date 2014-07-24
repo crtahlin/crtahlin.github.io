@@ -1,0 +1,13 @@
+---
+layout: post
+title: Syncing data from physionet servers to local machine (using cygwin)
+date: 2013-05-17
+comments: false
+---
+
+<h1>{{ page.title }}</h1>
+<div class='post'>
+Full instructions for downloading physionet data can be found here:<br /><a href="http://physionet.org/faq.shtml#downloading-databases">http://physionet.org/faq.shtml#downloading-databases</a><br /><br />Below is the procedure that worked for me. List the available databases and their sizes with the command: <span style="font-family: Courier New, Courier, monospace; font-size: x-small;">rsync physionet.org::&nbsp;</span><br /><br />Use cygwin. Create a directory to hold the copy of the database, e.g.:<br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">mkdir /usr/database&nbsp;</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">mkdir /usr/database/sddb&nbsp;</span><br /><br />Use the rsync command to copy the database to the newly created directory:<br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">rsync -Cavzr physionet.org::sddb /cygdrive/c/cygwin/usr/database/sddb</span></div>
+<h2>Comments</h2>
+<div class='comments'>
+</div>

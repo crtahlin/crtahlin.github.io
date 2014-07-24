@@ -1,0 +1,13 @@
+---
+layout: post
+title: Transforming physionet RR data into R readable text files
+date: 2013-05-17
+comments: false
+---
+
+<h1>{{ page.title }}</h1>
+<div class='post'>
+After syncing the data from physionet to the local machine (as described <a href="http://r-eligious.blogspot.com/2013/05/syncing-data-from-physionet-servers-to.html">here</a>), I can run a shell script on the downloaded files to extract information into text file to import into R.<br /><br />For reference, the code in createRRintervals.sh bash script, that resides in the /usr/databse/sddb directory, synced with the physionet sddb database:<br /><br /><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">#!/bin/bash</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">FILE="./RECORDS"</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"><br /></span><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"># repeat for each record</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">for OUTPUT in $(cat $FILE)</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">do</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"># produce RR interval data; use unadited annotations, see ann2rr help for details</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">ann2rr -r $OUTPUT -a ari -i s -V T -v s -W -w &gt; $OUTPUT.unauditedRR.txt</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"><br /></span><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"># produce HR beat data; use unadited annotations, see ihr help for details</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">ihr -r $OUTPUT -a ari -d 10000 -vs &gt; $OUTPUT.unauditedHR.txt</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"><br /></span><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"># produce HR beat data at constant intervals; use unadited annotations, see tach help for details</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">tach -r $OUTPUT -a ari -F 4 -O -Vs &gt; $OUTPUT.unauditedHRconstint.txt</span><br /><span style="font-family: Courier New, Courier, monospace; font-size: x-small;"><br /></span><span style="font-family: Courier New, Courier, monospace; font-size: x-small;">done</span><br /></div>
+<h2>Comments</h2>
+<div class='comments'>
+</div>

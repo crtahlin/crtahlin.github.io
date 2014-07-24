@@ -1,0 +1,13 @@
+---
+layout: post
+title: Webscraping data about bad credits transferred to Bank Assets Management Company
+date: 2014-07-24
+comments: false
+---
+
+<h1>{{ page.title }}</h1>
+<div class='post'>
+<div dir="ltr">Some Slovenian banks had their bad credits transferred to the <a href="http://www.dutb.eu/en/frequently-asked-questions" target="_blank">Bank Asset Management Company</a> (BAMC) &nbsp;a.k.a. "bad bank". The information about the credits was made public.</div><div dir="ltr"><br /></div><div dir="ltr">Specifically, <a href="http://www.dutb.eu/si/za-medije/sporocila-za-medije/113-dutb-objavlja-informacije-neposredno-povezane-s-krediti-neplacnikov-kot-tveganimi-postavkami-ki-se-vodijo-kot-slabitve-v-bilancah-bank-in-ki-so-bili-preneseni-na-dutb" target="_blank">this post</a> contains links (on 24.7.2014) to web pages containing data about each contract transferred to the bad bank from the <a href="http://www.nlb.si/" target="_blank">NLB</a> and <a href="http://www.nkbm.si/" target="_blank">NKBM</a> banks, who was in the management and advisory boards at the time, etc. (The English version of the page does not seem to work at the moment, hence the link points to the Slovenian version.)</div><div dir="ltr"><br /></div><div dir="ltr">As an exercise in webscraping, motivated by the Coursera "<a href="https://class.coursera.org/getdata-005" target="_blank">Getting and Cleaning Data</a>" course, I wrote some code that scrapes the data published in HTML tables, parses it and imports it into an R data frame.<br /><br />The code is in <a href="https://gist.github.com/bb217bd95592a7006161.git" target="_blank">this gist</a>. (I would include it in the blog, but it seems the blogger+gist integration does not work in certain cases.)<br /><br />The function <span style="font-family: Courier New, Courier, monospace;">getCreditData()</span> takes as an argument the name of the bank (<span style="font-family: Courier New, Courier, monospace;">"NLB"</span> or <span style="font-family: Courier New, Courier, monospace;">"NKBM"</span>) and returns a data frame with the columns published on the BAMC website.<br /><br />I might do some visualizations of the data in the future (a couple of ggplots are at the bottom of the code file, just to get a feeling).<br /><pre class="line-pre" style="background-color: white; box-sizing: border-box; color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.799999237060547px; width: 826px;"><div class="line" id="file-getcreditdata-r-LC1" style="box-sizing: border-box;"><br /></div><br /></pre></div></div>
+<h2>Comments</h2>
+<div class='comments'>
+</div>
