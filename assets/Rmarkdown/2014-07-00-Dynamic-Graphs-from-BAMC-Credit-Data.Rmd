@@ -1,15 +1,17 @@
 ---
-title: "Dynamic Graphs from BAMC Credit Data"
-author: "Crt Ahlin"
-date: "25. 07. 2014"
-output: html_document
+title: "Trying out dynamic graphs from BAMC credit data using plotly and ggvis packages"
+#author: "Crt Ahlin"
+#date: "25. 07. 2014"
+output:
+  html_document:
+    toc: yes
 ---
 
 I will look at two ways to generate dynamic graphs from the data scraped from the BAMC about "bad" credits. The first is the [plotly R package](https://plot.ly/r/) which uses the [ggplot2 package](http://ggplot2.org/) and extends it with some "dynamic" features. And the second is the freshly new and under development [ggvis R package](http://ggvis.rstudio.com/cookbook.html).
 
 
 The following code scrapes the data form the website of BAMC and saves it into data frames. Prerequisites: load the function `getCreditData()` and the required libraries mentioned in the previous post. 
-```{r, echo=FALSE}
+```{r, echo=FALSE, results="hide", warning=FALSE, message=FALSE}
 # load the XML library
 library(XML)
 
@@ -49,13 +51,13 @@ return(data)
 }
 ```
 
-```{r, echo=FALSE, results=FALSE}
+```{r, echo=FALSE, results="hide", warning=FALSE, message=FALSE}
 library(plotly)
 set_credentials_file(username="crtahlin", api_key="r9co8d5t4s")
 
 ```
 
-```{r}
+```{r, results='hide'}
 # get data from website
 dataNLB <- getCreditData("NLB")
 dataNKBM <- getCreditData("NKBM")
@@ -64,7 +66,7 @@ dataNKBM <- getCreditData("NKBM")
 Let's try the plotly package. 
 
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, warning=FALSE}
 library(plotly)
 library(ggplot2)
 library(scales)
@@ -90,15 +92,31 @@ dataSubsetNKBM <- gettopContracts(dataNKBM, N)
 # plot NLB top contracts
 ggPlot <- ggplot(data=dataSubsetNLB, aes(x=Naziv, y=ZnesekEUR)) + geom_bar(stat="identity") + theme_bw() +
   scale_x_discrete(limits=unique(dataSubsetNLB[,"Naziv"])) + scale_y_continuous(labels=dot) + 
-  ggtitle(paste("Po zneskih najvišjih", N,"pogodb (NLB)")) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ggtitle(paste("Just an example plot (NLB)")) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 print(ggPlot) # print the "original" ggplot2
 
-r <- py$ggplotly(ggPlot)
-r$response$url # go to this URL for the result
+# Try to print a dynamic ggplot in plotly
+# r <- py$ggplotly(ggPlot)
+# r$response$url # go to this URL for the result
 ```
-The ggplot2 "extension" does not seem to work as excpected... Will try "native" plotly code.
+The ggplot2 "extension" does not seem to work as expected... The first time the plot [was weird][https://plot.ly/~crtahlin/2], now it doesn't finish in decent time. That's why above code is commented out. I won't spend more time on the plotly, but will rather invest it in ggvis package.
 
 
+```{r, warning=FALSE, message=FALSE}
+library(ggvis)
 
+# drop levels that have no values from the data subset
+dataSubsetNLB <- (droplevels(dataSubsetNLB))
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+# function to return the names of firms for the hover tooltip
+firmNames <- function(x) {
+  if(is.null(x)) return(NULL)
+  paste0(x[1], collapse = "<br />")
+}
+
+# plot a ggvis graphic similar to the ggplot one; add a simple hover tooltip
+dataSubsetNLB %>% ggvis(~Naziv, ~ZnesekEUR) %>% layer_bars() %>%
+  add_axis("x",properties = axis_props(labels=list(angle=90, align="left")) ) %>% add_tooltip(firmNames, "hover")
+
+```
+It's relatively easy to make a plot comparable to ggplot2, with the added functionality of basic tooltip on mouse hover (not visible in blog post - I guess it maybe needs a running R session?). Except for adding the title of the plot, which seems not to be implemented yet :) Can't wait to see further development of the package.
